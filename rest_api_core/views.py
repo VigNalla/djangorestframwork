@@ -4,8 +4,9 @@ from rest_framework import status
 from .serializers import HelloSerializer
 
 class HelloAPIView(APIView):
+    """Class for handling the API View"""
     def get(self, request):
-        return Response({"success":True, "message": "Hello, API apprentice!!!"})
+        return Response({"success":True, "data": "Hello, API apprentice!!!"})
     
     def post(self, request):
         serializer = HelloSerializer(data=request.data)
@@ -13,7 +14,7 @@ class HelloAPIView(APIView):
             name = serializer.validated_data.get('name')
             message = serializer.validated_data.get('message')
             
-            return Response({"success":True, "message": f"Hello, {name} \n {message}"}, status=status.HTTP_200_OK)            
+            return Response({"success":True, "data":serializer.validated_data, "message": f"Hello, {name} \n {message}"}, status=status.HTTP_200_OK)            
         
-        return Response({"success":False, "message": "Name is required!" }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"success":False, "data":serializer.errors, "message": "Validation Failed!" }, status=status.HTTP_400_BAD_REQUEST)
         
